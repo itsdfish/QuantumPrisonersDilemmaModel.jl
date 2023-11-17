@@ -1,5 +1,19 @@
 module QuantumPrisonersDilemmaModel
 
-# Write your package code here.
+    using Distributions: Binomial
+    using Distributions: ContinuousUnivariateDistribution
+    using LinearAlgebra
 
+    import Distributions: logpdf
+    import Distributions: pdf
+    import Distributions: rand 
+
+    export predict
+    export logpdf 
+    export pdf
+    export QPDM
+    export rand 
+
+    include("structs.jl")
+    include("function.jl")
 end
