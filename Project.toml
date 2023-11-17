@@ -1,7 +1,7 @@
 name = "QuantumPrisonersDilemmaModel"
 uuid = "24e5ef78-50fe-477e-a5d7-9fd2ec18bc46"
 authors = ["itsdfish"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"

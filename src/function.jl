@@ -177,3 +177,7 @@ function logpdf(dist::AbstractQPDM, n::Int, n_d::Vector{Int}; t = π / 2)
     Θ = predict(dist; t)
     return sum(@. logpdf(Binomial(n, Θ), n_d))
 end
+
+loglikelihood(d::QPDM, data::Tuple) = logpdf(d, data...)
+
+logpdf(dist::QPDM, x::Tuple) = logpdf(dist, x...)

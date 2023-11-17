@@ -7,6 +7,7 @@ module QuantumPrisonersDilemmaModel
     import Distributions: logpdf
     import Distributions: pdf
     import Distributions: rand 
+    import Distributions: loglikelihood
 
     export predict
     export logpdf 
