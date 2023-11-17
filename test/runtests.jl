@@ -69,3 +69,29 @@ end
     @test H2[4,4] == -2
     @test H2 == H2'
 end
+
+@safetestset "logpdf" begin
+    using QuantumPrisonersDilemmaModel
+    using Test
+    using Random 
+
+    Random.seed!(410)
+
+    n = 20_000
+    μd = 1.0
+    γ = 2.0
+
+    μds = range(.8 * μd, 1.2 * μd, length=100)
+    γs = range(.8 * γ, 1.2 * γ, length=100)
+
+    model = QPDM(;μd, γ)
+    data = rand(model, n)
+
+    LLs = map(μd -> logpdf(QPDM(;μd=μd, γ), n, data), μds)
+    _,mxi = findmax(LLs)
+    @test μds[mxi] ≈ μd rtol = 1e-2
+
+    LLs = map(γ -> logpdf(QPDM(;μd, γ=γ), n, data), γs)
+    _,mxi = findmax(LLs)
+    @test γs[mxi] ≈ γ rtol = 1e-2
+end

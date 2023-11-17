@@ -13,9 +13,10 @@ A model object for the Quantum Prisoner's Dilemma Model. The QPDM has four basis
 
 The bases are orthonormal and in standard form. The model assumes three conditions:
 
-1. Opponent defected
-2. Opponent cooperated
-3. Opponent's action uknown 
+1. Player 1 (you) is told that player 2 defected
+2. Player 1 (you) is told that player 2 cooperated
+3. Player 1 (you) is not informed of player's action
+
 
 Model inputs and outputs are assumed to be in the order above. 
 

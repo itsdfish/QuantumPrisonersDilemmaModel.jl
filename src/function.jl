@@ -27,10 +27,10 @@ end
 
 Returns predicted response probability for the following conditions:
 
-1. Opponent defected
-2. Opponent cooperated
-3. Opponent's action uknown 
-
+1. Player 1 is told that player 2 defected
+2. Player 1 is told that player 2 cooperated
+3. Player 1 is not informed of player's action
+    
 # Arguments
 
 - `dist::AbstractQPDM`
@@ -38,6 +38,14 @@ Returns predicted response probability for the following conditions:
 # Keywords
 
 - `t = π / 2`: time of decision
+
+# Example 
+
+```julia 
+using QuantumPrisonersDilemmaModel 
+model = QPDM(;μd=.51, γ=2.09)
+predict(model)
+```
 """
 function predict(dist::AbstractQPDM; t = π / 2)
     (;μd,μc,γ) = dist
@@ -85,9 +93,9 @@ rand(dist::AbstractQPDM; t = π / 2) = rand(dist, 1; t = π / 2)
 
 Generates simulated data for the following conditions:
 
-1. Opponent defected
-2. Opponent cooperated
-3. Opponent's action uknown 
+1. Player 1 is told that player 2 defected
+2. Player 1 is told that player 2 cooperated
+3. Player 1 is not informed of player's action
 
 # Arguments
 
@@ -97,6 +105,14 @@ Generates simulated data for the following conditions:
 # Keywords
 
 - `t = π / 2`: time of decision
+
+# Example 
+
+```julia 
+using QuantumPrisonersDilemmaModel 
+model = QPDM(;μd=.51, γ=2.09)
+data = rand(model, 100)
+```
 """
 function rand(dist::AbstractQPDM, n::Int; t = π / 2)
     Θ = predict(dist; t)
@@ -108,9 +124,10 @@ end
 
 Returns the joint probability density given data for the following conditions:
 
-1. Opponent defected
-2. Opponent cooperated
-3. Opponent's action uknown 
+1. Player 1 is told that player 2 defected
+2. Player 1 is told that player 2 cooperated
+3. Player 1 is not informed of player's action
+    
 
 # Arguments
 
@@ -124,7 +141,7 @@ Returns the joint probability density given data for the following conditions:
 """
 function pdf(dist::AbstractQPDM, n::Int, n_d::Vector{Int}; t = π / 2)
     Θ = predict(dist; t)
-    return @. pdf(Binomial(n, Θ)) |> prod 
+    return prod(@. pdf(Binomial(n, Θ), n_d)) 
 end
 
 """
@@ -132,9 +149,9 @@ end
 
 Returns the joint log density given data for the following conditions:
 
-1. Opponent defected
-2. Opponent cooperated
-3. Opponent's action uknown 
+1. Player 1 is told that player 2 defected
+2. Player 1 is told that player 2 cooperated
+3. Player 1 is not informed of player's action
 
 # Arguments
 
@@ -145,8 +162,18 @@ Returns the joint log density given data for the following conditions:
 # Keywords
 
 - `t = π / 2`: time of decision
+
+# Example 
+
+```julia 
+using QuantumPrisonersDilemmaModel 
+model = QPDM(;μd=.51, γ=2.09)
+n_trials = 100
+data = rand(model, n_trials)
+logpdf(model, n_trials, data)
+```
 """
 function logpdf(dist::AbstractQPDM, n::Int, n_d::Vector{Int}; t = π / 2)
     Θ = predict(dist; t)
-    return @. logpdf(Binomial(n, Θ)) |> sum 
+    return sum(@. logpdf(Binomial(n, Θ), n_d))
 end

@@ -1,2 +1,4 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+QuantumPrisonersDilemmaModel = "24e5ef78-50fe-477e-a5d7-9fd2ec18bc46"
