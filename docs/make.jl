@@ -1,3 +1,6 @@
+using Documenter
+using QuantumPrisonersDilemmaModel
+
 makedocs(
     warnonly = true,
     sitename="QuantumPrisonersDilemmaModel",
@@ -18,7 +21,6 @@ makedocs(
     pages=[
         "Home" => "index.md",
         "Example" => "example.md",
-
     ]
 )
 
