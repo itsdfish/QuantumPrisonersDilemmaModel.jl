@@ -1,27 +1,3 @@
-function make_H1(μd, μc)
-	H = fill(0.0, 4, 4)
-	sub_h!(H, μd, 1:2)
-	sub_h!(H, μc, 3:4)
-	return H
-end
-
-function sub_h!(H, μ, i)
-	v = 1 / √(1 + μ^2)
-	H[i,i] .= v
-	H[i[1],i[1]] *= μ
-	H[i[2],i[2]] *= -μ
-	return H
-end
-
-function make_H2(γ)
-	v = -γ / √(2)
-	H = [v 0 v 0;
-		 0 -v 0 v;
-		 v 0 -v 0;
-		 0 v 0 v]
-	return H
-end
-
 """
     predict(dist::AbstractQPDM; t = π / 2)
 
@@ -84,6 +60,51 @@ function predict(dist::AbstractQPDM; t = π / 2)
 	proj = M * ψ0′
 	p = real(proj' * proj)
     return [p_d,p_c,p]
+end
+
+"""
+    make_H1(μd, μc)
+
+Creates a Hamiltonian matrix which rotates in favor of defecting or cooperating depending on 
+μd and μd. 
+
+# Arguments 
+
+- `μd`: utility for defecting 
+- `μc`: utility for cooperating
+"""
+function make_H1(μd, μc)
+	H = fill(0.0, 4, 4)
+	sub_h!(H, μd, 1:2)
+	sub_h!(H, μc, 3:4)
+	return H
+end
+
+function sub_h!(H, μ, i)
+	v = 1 / √(1 + μ^2)
+	H[i,i] .= v
+	H[i[1],i[1]] *= μ
+	H[i[2],i[2]] *= -μ
+	return H
+end
+
+"""
+    make_H2(γ)
+
+Creates a Hamiltonian matrix which represents cognitive dissonance or wishful thinking. The matrix can be decomposed
+into two components. The components rotate beliefs about the other player to be more consistent with planned actions.  
+For example, if the other player defected, the matrix will rotate actions towards defection. 
+# Arguments 
+
+- `γ`: entanglement parameter which aligns beliefs and actions
+"""
+function make_H2(γ)
+	v = -γ / √(2)
+	H = [v 0 v 0;
+		 0 -v 0 v;
+		 v 0 -v 0;
+		 0 v 0 v]
+	return H
 end
 
 rand(dist::AbstractQPDM; t = π / 2) = rand(dist, 1; t = π / 2)
@@ -178,6 +199,6 @@ function logpdf(dist::AbstractQPDM, n::Int, n_d::Vector{Int}; t = π / 2)
     return sum(@. logpdf(Binomial(n, Θ), n_d))
 end
 
-loglikelihood(d::QPDM, data::Tuple) = logpdf(d, data...)
+loglikelihood(d::AbstractQPDM, data::Tuple) = logpdf(d, data...)
 
-logpdf(dist::QPDM, x::Tuple) = logpdf(dist, x...)
+logpdf(dist::AbstractQPDM, x::Tuple) = logpdf(dist, x...)
