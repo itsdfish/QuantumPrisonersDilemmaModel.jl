@@ -1,3 +1,5 @@
+!!! warning "Warning"
+    This page is under construction.
 # Introduction 
 
 In this tutorial, we present a quantum cognition model of interference effect's in the prisoner's dilemma. The goal is to provide a conceptual understanding of the model and how it produces interference effects. Before introducing the model, we will briefly describe the Prisoner's dilemma and the interference effect.  
@@ -99,17 +101,20 @@ Combining the basis vectors into a single matrix, we get the identity matrix:
 ```
 ## States
 
-The state of the cognitive system is a superposition (i.e. linear combination) over basis states. The state is represented by the following vector:
+The state of the cognitive system is a superposition (i.e. linear combination) over basis states:
 
-$\ket{\boldsymbol{\psi}} = \alpha_{\textrm{DD}} \ket{\textrm{DD}}+ \alpha_{\textrm{DC}} \ket{\textrm{DC}}+ \alpha_{\textrm{CD}} \ket{\textrm{CD}}+ \alpha_{\textrm{CC}} \ket{\textrm{CC}}$
+$\ket{\boldsymbol{\psi}} = \alpha_{\textrm{DD}} \ket{\textrm{DD}}+ \alpha_{\textrm{DC}} \ket{\textrm{DC}}+ \alpha_{\textrm{CD}} \ket{\textrm{CD}}+ \alpha_{\textrm{CC}} \ket{\textrm{CC}},$
 
-$\begin{bmatrix}
+where $\lVert\ket{\boldsymbol{\psi}} \rVert = 1$. The coefficients can be written as:
+
+$\boldsymbol{\alpha} = \begin{bmatrix}
 	\alpha_{\textrm{DD}} \\ 
 	\alpha_{\textrm{DC}} \\ 
 	\alpha_{\textrm{CD}} \\ 
 	\alpha_{\textrm{CC}} \\ 
 \end{bmatrix}$
-where $\lVert\ket{\boldsymbol{\psi}} \rVert = 1$. The initial state vector is given by:
+
+The QPDM assumes the initial state of the decision maker is a uniform superposition over basis states: 
 
 $\ket{\boldsymbol{\psi}_0} = \frac{1}{2}\begin{bmatrix}
 	1 \\ 
@@ -117,7 +122,7 @@ $\ket{\boldsymbol{\psi}_0} = \frac{1}{2}\begin{bmatrix}
 	1 \\ 
 	1 \\ 
 \end{bmatrix},$
-which assumes a uniform distribution over the belief-action possibilities. In conditions 1 and 2 where the action of player 1 is given, the state is updated: $\ket{\boldsymbol{\psi}_0} \rightarrow \ket{\boldsymbol{\psi}_k},k \in \{c,d\}$. When player 2 is told that player 1 defected, the state vector becomes:
+In conditions 1 and 2, the state is updated upon learning the decision of player 1: $\ket{\boldsymbol{\psi}_0} \rightarrow \ket{\boldsymbol{\psi}_k},k \in \{c,d\}$. When player 2 is told that player 1 defected, the state vector becomes:
 
 $\ket{\boldsymbol{\psi}_d} = \frac{1}{\sqrt{2}}\begin{bmatrix}
 	1 \\ 
@@ -136,6 +141,39 @@ $\ket{\boldsymbol{\psi}_c} = \frac{1}{\sqrt{2}}\begin{bmatrix}
 
 ## Hamiltonian Matrices
 
+Hamiltonian matrices govern the decision dynamics of the model. The Hamiltonian matrix $\mathbf{H}$ consists of two components: $\mathbf{H}_A$ is sensitive to the payoff matrix, and $\mathbf{H}_B$ is sensitive to cognitive dissonance between beliefs and actions. The component $\mathbf{H}_A$ is defined as follows: 
+
+$\mathbf{H}_A = \begin{bmatrix}		
+	\mathbf{H}_{A_d} & \mathbf{0}\\
+	\mathbf{0} & \mathbf{H}_{A_c}\\
+\end{bmatrix},$
+where
+
+$\mathbf{H}_{A_k} = \frac{1}{\sqrt{1 + \mu_k^2}}\begin{bmatrix}		
+	\mu_k & 1\\
+	1 & -\mu_k\\
+\end{bmatrix}.$
+
+```@raw html
+<details>
+<summary><b>Show Code</b></summary>
+```
+```@example h1_defect
+using Plots 
+prob_defect(μ, t) = .5 + (μ / (1 + μ^2)) * sin((π * t) / 2)^2
+μs = range(-1, 1, length=5)
+ts = range(0, π / 2, length=100)
+plot_Ha = plot(ts, map(μ -> prob_defect.(μ, ts), μs), grid=false, label=μs', 
+	xlabel="Time", ylabel="Probability Defect", legendtitle="μ")
+nothing
+```
+```@raw html
+</details>
+```
+```@example h1_defect
+plot_Ha
+```
+
 ## Action Selection 
 
 $\mathbf{P}_d = \ket{\textrm{DD}} \bra{\textrm{DD}} + \ket{\textrm{DC}} \bra{\textrm{DC}} = \begin{bmatrix}		
@@ -145,32 +183,65 @@ $\mathbf{P}_d = \ket{\textrm{DD}} \bra{\textrm{DD}} + \ket{\textrm{DC}} \bra{\te
 	0 & 0 & 0 & 0\\
 \end{bmatrix}$
 
-$\Pr(R_2=d \mid R_1=d) = \lVert\mathbf{P}_d \mathbf{H} \ket{\psi_d}\rVert^2$
+The unitary transformation matrix is given by:
+$\mathbf{U} = e^{-i \cdot t \cdot  \mathbf{H}},$
 
-$\Pr(R_2=d \mid R_1=c) = \lVert\mathbf{P}_d \mathbf{H} \ket{\psi_c}\rVert^2$
+with $t=\frac{\pi}{2}$, which maximizes the amplitude of the waveform. 
 
-$\Pr(R_2=d) = \lVert\mathbf{P}_d \mathbf{H} \ket{\psi_0}\rVert^2$
+$\Pr(R_2=d \mid R_1=d) = \lVert\mathbf{P}_d \mathbf{U} \ket{\psi_d}\rVert^2$
 
-```@raw html
-<details>
-<summary><b>Preview title</b></summary>
+$\Pr(R_2=d \mid R_1=c) = \lVert\mathbf{P}_d \mathbf{U} \ket{\psi_c}\rVert^2$
 
-@example 
-x = 1
-
-</details>
-```
-
+$\Pr(R_2=d) = \lVert\mathbf{P}_d \mathbf{U} \ket{\psi_0}\rVert^2$
 
 ## QPDM Predictions
 
 As a simple example, the code block illustrates how to generate the predictions in the table above. The first parameter $\mu_d$ is the utility for defecting. When no value is passed for the utility of cooperating, $\mu_d = \mu_c$. The parameter $\gamma$ is the entanglement parameter which aligns beliefs about the opponents action and one's own action. 
 
-```@example 
+```@example preds
 using QuantumPrisonersDilemmaModel
 model = QPDM(;μd=.51, γ=2.09)
 preds = predict(model)
 ```
+
+```@raw html
+<details>
+<summary><b>Show Code</b></summary>
+```
+```@example contour_plot
+using Plots 
+using QuantumPrisonersDilemmaModel 
+
+function compute_IE(;μ, γ) 
+	preds = predict(QPDM(;μd=μ, γ)) 
+	if preds[3] < minimum(preds[1:2])
+		return preds[3] - minimum(preds[1:2])
+	elseif preds[3] > maximum(preds[1:2]) 
+		return preds[3] - maximum(preds[1:2])
+	end
+	return 0.0
+end
+
+map_mu(;μs, γ) = map(μ -> compute_IE(;μ, γ), μs)
+
+compute_IE(;μ=.5, γ=2) 
+μs = range(-1, 1, length=100)
+γs = range(-2, 2, length=5)
+
+IEs = map(γ -> map_mu(;μs, γ), γs)
+
+contour_plot1 = plot(μs, IEs, grid=false, label=γs', 
+	xlabel="μ", ylabel="Interference Effect", legendtitle="γ", legend=:outerright)
+nothing
+```
+```@raw html
+</details>
+```
+```@example contour_plot
+contour_plot1
+```
+
+
 # References
 
 Pothos, E. M., & Busemeyer, J. R. (2009). A quantum probability explanation for violations of ‘rational’decision theory. Proceedings of the Royal Society B: Biological Sciences, 276(1665), 2171-2178.

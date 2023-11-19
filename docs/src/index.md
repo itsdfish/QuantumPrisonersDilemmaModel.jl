@@ -1,6 +1,6 @@
 # QuantumPrisonersDilemmaModel.jl
 
-This package contains code for a quantum cognition model of the disjunction effect in the prisoner's dilemma. 
+This package contains code for a quantum cognition model of inteference effects in the prisoner's dilemma. 
 
 # Installation
 
