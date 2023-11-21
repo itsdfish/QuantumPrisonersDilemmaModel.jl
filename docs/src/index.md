@@ -1,6 +1,26 @@
 # QuantumPrisonersDilemmaModel.jl
 
-This package contains code for a quantum cognition model of inteference effects in the prisoner's dilemma. 
+This package contains code for a quantum cognition model of inteference effects in the prisoner's dilemma. The plot below shows the dynamics of the model for each condition.
+```@raw html
+<details>
+<summary><b>Show Code</b></summary>
+```
+```@example a
+using Plots
+using QuantumPrisonersDilemmaModel 
+model = QPDM(;μd=.51, γ=2.09)
+ts = range(0, 3, length=300)
+preds = map(t -> predict(model; t), ts)
+color = [RGB(.251,.388,.847) RGB(.584,.345,.689) RGB(.796,.235,.2)]
+p1 = plot(ts, reduce(vcat, transpose.(preds)), grid=false, 
+    label=["p1 Cooperates" "p1 Defects" "p1 Unknown"], 
+    xlabel="Time", ylabel="Prob p2 Defects", linewidth=2; color)
+savefig("temp.png")
+```
+```@raw html
+</details>
+```
+![](temp.png)
 
 # Installation
 

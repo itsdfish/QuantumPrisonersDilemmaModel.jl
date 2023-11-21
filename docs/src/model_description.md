@@ -165,34 +165,40 @@ prob_defect(μ, t) = .5 + (μ / (1 + μ^2)) * sin((π * t) / 2)^2
 ts = range(0, π / 2, length=100)
 plot_Ha = plot(ts, map(μ -> prob_defect.(μ, ts), μs), grid=false, label=μs', 
 	xlabel="Time", ylabel="Probability Defect", legendtitle="μ")
-nothing
+savefig("h1_prob.png")
 ```
 ```@raw html
 </details>
 ```
-```@example h1_defect
-plot_Ha
-```
+![](h1_prob.png)
 
 ## Action Selection 
 
-$\mathbf{P}_d = \ket{\textrm{DD}} \bra{\textrm{DD}} + \ket{\textrm{DC}} \bra{\textrm{DC}} = \begin{bmatrix}		
+
+This selection describes the process of selecting an action and determining the defection probability. The time evolution is governed by the unitary transformation matrix which is given by:
+
+$\mathbf{U} = e^{-i \cdot t \cdot  \mathbf{H}},$
+
+The QPDM makes the simplifying assumption that the decision is made after a relative short period of time where the wave function is at the maximum amplitude: $t=\frac{\pi}{2}$. Next, we define a projection matrix for computing the probability of defecting. The probability of defecting is the sum of outer products for DD and DC:  
+
+$\mathbf{P} = \ket{\textrm{DD}} \bra{\textrm{DD}} + \ket{\textrm{DC}} \bra{\textrm{DC}} = \begin{bmatrix}		
 	1 & 0 & 0 & 0\\
 	0 & 0 & 0 & 0\\
 	0 & 0 & 1 & 0\\
 	0 & 0 & 0 & 0\\
 \end{bmatrix}$
 
-The unitary transformation matrix is given by:
-$\mathbf{U} = e^{-i \cdot t \cdot  \mathbf{H}},$
+The probability of player 2 defecting is given by the squared magnitude of the projection from the current state $\boldsymbol{\psi}_1 \rightarrow \boldsymbol{\psi}_2$. The probability that player 2 defects given that player 1 defected is:
 
-with $t=\frac{\pi}{2}$, which maximizes the amplitude of the waveform. 
+$\Pr(R_2=d \mid R_1=d) = \lVert\mathbf{P} \mathbf{U} \ket{\psi_d}\rVert^2$
 
-$\Pr(R_2=d \mid R_1=d) = \lVert\mathbf{P}_d \mathbf{U} \ket{\psi_d}\rVert^2$
+The probability that player 2 defects given that player 1 cooperated is:
 
-$\Pr(R_2=d \mid R_1=c) = \lVert\mathbf{P}_d \mathbf{U} \ket{\psi_c}\rVert^2$
+$\Pr(R_2=d \mid R_1=c) = \lVert\mathbf{P} \mathbf{U} \ket{\psi_c}\rVert^2$
 
-$\Pr(R_2=d) = \lVert\mathbf{P}_d \mathbf{U} \ket{\psi_0}\rVert^2$
+The probability that player 2 defects given that the action of player 1 is unknown is:
+
+$\Pr(R_2=d) = \lVert\mathbf{P} \mathbf{U} \ket{\psi_0}\rVert^2$
 
 ## QPDM Predictions
 
@@ -225,21 +231,19 @@ end
 map_mu(;μs, γ) = map(μ -> compute_IE(;μ, γ), μs)
 
 compute_IE(;μ=.5, γ=2) 
-μs = range(-1, 1, length=100)
+μs = range(-1, 1, length=200)
 γs = range(-2, 2, length=5)
 
 IEs = map(γ -> map_mu(;μs, γ), γs)
 
-contour_plot1 = plot(μs, IEs, grid=false, label=γs', 
+ie_plot = plot(μs, IEs, grid=false, label=γs', 
 	xlabel="μ", ylabel="Interference Effect", legendtitle="γ", legend=:outerright)
-nothing
+savefig("ie_plot.png")
 ```
 ```@raw html
 </details>
 ```
-```@example contour_plot
-contour_plot1
-```
+![](ie_plot.png)
 
 
 # References
