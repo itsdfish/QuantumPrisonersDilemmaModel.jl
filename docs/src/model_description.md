@@ -174,7 +174,6 @@ savefig("h1_prob.png")
 
 ## Action Selection 
 
-
 This selection describes the process of selecting an action and determining the defection probability. The time evolution is governed by the unitary transformation matrix which is given by:
 
 $\mathbf{U} = e^{-i \cdot t \cdot  \mathbf{H}},$

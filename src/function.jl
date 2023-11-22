@@ -3,9 +3,9 @@
 
 Returns predicted response probability for the following conditions:
 
-1. Player 1 is told that player 2 defected
-2. Player 1 is told that player 2 cooperated
-3. Player 1 is not informed of player's action
+1. Player 2 is told that player 1 defected
+2. Player 2 is told that player 1 cooperated
+3. Player 2 is not informed of player 1's action
     
 # Arguments
 
@@ -114,9 +114,9 @@ rand(dist::AbstractQPDM; t = π / 2) = rand(dist, 1; t = π / 2)
 
 Generates simulated data for the following conditions:
 
-1. Player 1 is told that player 2 defected
-2. Player 1 is told that player 2 cooperated
-3. Player 1 is not informed of player's action
+1. Player 2 is told that player 1 defected
+2. Player 2 is told that player 1 cooperated
+3. Player 2 is not informed of player 1's action
 
 # Arguments
 
@@ -145,9 +145,9 @@ end
 
 Returns the joint probability density given data for the following conditions:
 
-1. Player 1 is told that player 2 defected
-2. Player 1 is told that player 2 cooperated
-3. Player 1 is not informed of player's action
+1. Player 2 is told that player 1 defected
+2. Player 2 is told that player 1 cooperated
+3. Player 2 is not informed of player 1's action
     
 
 # Arguments
@@ -170,9 +170,9 @@ end
 
 Returns the joint log density given data for the following conditions:
 
-1. Player 1 is told that player 2 defected
-2. Player 1 is told that player 2 cooperated
-3. Player 1 is not informed of player's action
+1. Player 2 is told that player 1 defected
+2. Player 2 is told that player 1 cooperated
+3. Player 2 is not informed of player 1's action
 
 # Arguments
 

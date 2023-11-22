@@ -95,3 +95,25 @@ end
     _,mxi = findmax(LLs)
     @test γs[mxi] ≈ γ rtol = 1e-2
 end
+
+@safetestset "pdf" begin
+    using QuantumPrisonersDilemmaModel
+    using Distributions
+    using Test
+    using Random 
+
+    Random.seed!(11214)
+
+    n = 5
+
+    model = QPDM(;μd=.5, γ=2)
+    data = rand(model, n)
+
+    for _ ∈ 1:10
+        μd = rand(Uniform(-1, 1))
+        γ = rand(Uniform(-2, 2))
+        LL1 = logpdf(QPDM(;μd, γ), n, data)
+        LL2 = log(pdf(QPDM(;μd, γ), n, data))
+        @test LL1 ≈ LL2
+    end
+end
