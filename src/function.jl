@@ -94,6 +94,7 @@ end
 Creates a Hamiltonian matrix which represents cognitive dissonance or wishful thinking. The matrix can be decomposed
 into two components. The components rotate beliefs about the other player to be more consistent with planned actions.  
 For example, if the other player defected, the matrix will rotate actions towards defection. 
+
 # Arguments 
 
 - `γ`: entanglement parameter which aligns beliefs and actions

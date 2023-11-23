@@ -62,13 +62,7 @@ An important property of the law of total probability is that it requires condit
 
 $\min(\Pr(R_2=d \mid R_1=d), \Pr(R_2=d \mid R_1=c)) \leq \Pr(R_2=d) \leq \max(\Pr(R_2=d \mid R_2=1), \Pr(R_2=d \mid R_1=c)),$
 
-which is violated in human decision making, leading to an interference effect. The results below show a typical response pattern:
-
-|  Condition   | Formula    | Data | Model |
-| :-- | :-- | :-- | :-- |
-|  1   |  $\Pr(R_1=d \mid R_2=d)$   | .84| .81|
-|  2  |   $\Pr(R_1=d \mid R_2=c)$   | .66| .65|
-|  3   |  $\Pr(R_1=d)$  | .55 | .57|
+which is violated in human decision making, leading to an interference effect. 
 
 An interference effect is present in the data because the response probability in condition 3 is below the response probabilities in conditions 1 and 2. The predictions of the quantum model are shown in the last column.
 
@@ -189,25 +183,69 @@ $\mathbf{P} = \ket{\textrm{DD}} \bra{\textrm{DD}} + \ket{\textrm{DC}} \bra{\text
 
 The probability of player 2 defecting is given by the squared magnitude of the projection from the current state $\boldsymbol{\psi}_1 \rightarrow \boldsymbol{\psi}_2$. The probability that player 2 defects given that player 1 defected is:
 
-$\Pr(R_2=d \mid R_1=d) = \lVert\mathbf{P} \mathbf{U} \ket{\psi_d}\rVert^2$
+$\Pr(R_2=d \mid R_1=d) = \lVert\mathbf{P} \cdot \mathbf{U} \cdot  \ket{\psi_d}\rVert^2$
 
 The probability that player 2 defects given that player 1 cooperated is:
 
-$\Pr(R_2=d \mid R_1=c) = \lVert\mathbf{P} \mathbf{U} \ket{\psi_c}\rVert^2$
+$\Pr(R_2=d \mid R_1=c) = \lVert\mathbf{P} \cdot  \mathbf{U} \cdot  \ket{\psi_c}\rVert^2$
 
 The probability that player 2 defects given that the action of player 1 is unknown is:
 
-$\Pr(R_2=d) = \lVert\mathbf{P} \mathbf{U} \ket{\psi_0}\rVert^2$
+$\Pr(R_2=d) = \lVert\mathbf{P} \cdot  \mathbf{U} \cdot  \ket{\psi_0}\rVert^2$
 
 ## QPDM Predictions
 
-As a simple example, the code block illustrates how to generate the predictions in the table above. The first parameter $\mu_d$ is the utility for defecting. When no value is passed for the utility of cooperating, $\mu_d = \mu_c$. The parameter $\gamma$ is the entanglement parameter which aligns beliefs about the opponents action and one's own action. 
+As a simple example, the code block illustrates how to generate the predictions in the table above. The first parameter $\mu_d$ is the utility for defecting. When no value is passed for the utility of cooperating, $\mu_d = \mu_c$. The parameter $\gamma$ is the entanglement parameter which aligns beliefs about the opponents action and one's own action. The model predictions are given below, along with the emprical data:
 
-```@example preds
+
+|  Condition   | Formula    | Data | Model |
+| :-- | :-- | :-- | :-- |
+|  1   |  $\Pr(R_1=d \mid R_2=d)$   | .84| .81|
+|  2  |   $\Pr(R_1=d \mid R_2=c)$   | .66| .65|
+|  3   |  $\Pr(R_1=d)$  | .55 | .57|
+
+The code used to generate the predictions can be viewed by expanding the code block below:
+
+```@raw html
+<details>
+<summary><b>Show Code</b></summary>
+```
+```@example model_preds
 using QuantumPrisonersDilemmaModel
 model = QPDM(;μd=.51, γ=2.09)
 preds = predict(model)
 ```
+```@raw html
+</details>
+```
+### Dynamics 
+
+The plot below shows the dynamics of the model for each condition.
+
+```@raw html
+<details>
+<summary><b>Show Code</b></summary>
+```
+```@example a
+using Plots
+using QuantumPrisonersDilemmaModel 
+model = QPDM(;μd=.51, γ=2.09)
+ts = range(0, 3, length=300)
+preds = map(t -> predict(model; t), ts)
+color = [RGB(.251,.388,.847) RGB(.584,.345,.689) RGB(.796,.235,.2)]
+p1 = plot(ts, reduce(vcat, transpose.(preds)), grid=false, 
+    label=["p1 Defects" "p1 Cooperates" "p1 Unknown"], 
+    xlabel="Time", ylabel="Prob p2 Defects", linewidth=2; color)
+savefig("probs_time.png")
+```
+```@raw html
+</details>
+```
+![](probs_time.png)
+
+### Interference Effects
+
+The plot below shows the interference effect as a function of $\mu$ for multiple values of $\gamma$. In the simulations below, we fix $t=\frac{\pi}{2}$.
 
 ```@raw html
 <details>
