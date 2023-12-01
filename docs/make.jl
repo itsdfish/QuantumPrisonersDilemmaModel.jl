@@ -20,8 +20,9 @@ makedocs(
     ],
     pages=[
         "Home" => "index.md",
-        "Overview" => "overview.md",
+        "Basic Usage" => "basic_usage.md",
         "Model Description" => "model_description.md",
+        "Parameter Estimation" => "parameter_estimation.md",
         "API" => "api.md",
     ]
 )

@@ -8,7 +8,7 @@ The quantum prisoner's dilemma model (QPDM) generates predictions for three cond
 
 1. Player 1 is told that player 2 defected
 2. Player 1 is told that player 2 cooperated
-3. Player 1 is not informed of player's action
+3. Player 1 is not informed of the action of player 2
 
 ```@example 
 using QuantumPrisonersDilemmaModel 
