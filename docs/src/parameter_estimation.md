@@ -43,7 +43,7 @@ To estimate the parameters, we need to pass the Turing model to `pigeons`. The s
 pt = pigeons(
     target=TuringLogPotential(turing_model((n, data), parms)), 
     record=[traces])
-samples = Chains(sample_array(pt), ["γ"])
+samples = Chains(sample_array(pt), ["γ","LL"])
 ```
 The trace of the `pigeon`'s sampler is given below:
 ```julia

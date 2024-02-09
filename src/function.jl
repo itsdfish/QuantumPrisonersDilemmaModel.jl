@@ -46,18 +46,15 @@ function predict(dist::AbstractQPDM; t = π / 2)
     M = Diagonal([1.0,0.0,1.0,0.0])
 
     # compute probability of defecting given that opponent defected
-    ψd′ = U * ψd
-	proj_d = M * ψd′
+	proj_d = M * U * ψd
 	p_d = real(proj_d' * proj_d)
 
     # compute probability of defecting given that opponent cooperated
-    ψc′ = U * ψc
-	proj_c = M * ψc′
+	proj_c = M *  U * ψc
 	p_c = real(proj_c' * proj_c)
 
     # compute probability of defecting given no knowledge of opponent's action
-    ψ0′ = U * ψ0
-	proj = M * ψ0′
+	proj = M * U * ψ0
 	p = real(proj' * proj)
     return [p_d,p_c,p]
 end
