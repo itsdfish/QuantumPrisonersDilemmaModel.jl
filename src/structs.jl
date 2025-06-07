@@ -30,7 +30,7 @@ Model inputs and outputs are assumed to be in the order above.
 
 ```julia
 using QuantumPrisonersDilemmaModel
-model = QPDM(;μd=.51, γ=2.09)
+model = QPDM(; μd=.51, γ=2.09)
 ```
 
 # References 
