@@ -1,4 +1,4 @@
-abstract type AbstractQPDM  <: ContinuousUnivariateDistribution end
+abstract type AbstractQPDM <: ContinuousUnivariateDistribution end
 
 """
 
@@ -37,15 +37,15 @@ model = QPDM(;μd=.51, γ=2.09)
 
 Pothos, E. M., & Busemeyer, J. R. (2009). A quantum probability explanation for violations of ‘rational’decision theory. Proceedings of the Royal Society B: Biological Sciences, 276(1665), 2171-2178.
 """
-struct QPDM{T<:Real} <: AbstractQPDM
+struct QPDM{T <: Real} <: AbstractQPDM
     μd::T
     μc::T
     γ::T
 end
 
-QPDM(;μd, μc=μd, γ) = QPDM(μd, μc, γ)
+QPDM(; μd, μc = μd, γ) = QPDM(μd, μc, γ)
 
-function QPDM(μd, μc, γ) 
+function QPDM(μd, μc, γ)
     μd, μc, γ = promote(μd, μc, γ)
     return QPDM(μd, μc, γ)
 end

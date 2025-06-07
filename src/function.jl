@@ -24,39 +24,39 @@ predict(model)
 ```
 """
 function predict(dist::AbstractQPDM; t = π / 2)
-    (;μd,μc,γ) = dist
+    (; μd, μc, γ) = dist
     # rotates belief in favor of cooperation of defection 
     H1 = make_H1(μd, μc)
     # hamiltonian matrix for reducing cognitive dissonance
     # aligns action with belief about opponent's action 
-	H2 = make_H2(γ)
+    H2 = make_H2(γ)
     # combine both hamiltonian matrices so that time evolution reflects their joint contribution
-	H = H1 .+ H2
+    H = H1 .+ H2
     # unitary transformation matrix
     U = exp(-im * t * H)
 
     # cognitive state after learning the opponent defected
-    ψd = [√(.5), √(.5), 0, 0]
+    ψd = [√(0.5), √(0.5), 0, 0]
     # cognitive state after learning the opponent cooperated
-	ψc = [0, 0, √(.5), √(.5)]
+    ψc = [0, 0, √(0.5), √(0.5)]
     # cognitive state when nothing is known about the action of the opponent
-    ψ0 = fill(.5, 4)
+    ψ0 = fill(0.5, 4)
 
     # projection matrix for defecting 
-    M = Diagonal([1.0,0.0,1.0,0.0])
+    M = Diagonal([1.0, 0.0, 1.0, 0.0])
 
     # compute probability of defecting given that opponent defected
-	proj_d = M * U * ψd
-	p_d = real(proj_d' * proj_d)
+    proj_d = M * U * ψd
+    p_d = real(proj_d' * proj_d)
 
     # compute probability of defecting given that opponent cooperated
-	proj_c = M * U * ψc
-	p_c = real(proj_c' * proj_c)
+    proj_c = M * U * ψc
+    p_c = real(proj_c' * proj_c)
 
     # compute probability of defecting given no knowledge of opponent's action
-	proj = M * U * ψ0
-	p = real(proj' * proj)
-    return [p_d,p_c,p]
+    proj = M * U * ψ0
+    p = real(proj' * proj)
+    return [p_d, p_c, p]
 end
 
 """
@@ -71,18 +71,18 @@ Creates a Hamiltonian matrix which rotates in favor of defecting or cooperating 
 - `μc`: utility for cooperating
 """
 function make_H1(μd, μc)
-	H = fill(0.0, 4, 4)
-	sub_h!(H, μd, 1:2)
-	sub_h!(H, μc, 3:4)
-	return H
+    H = fill(0.0, 4, 4)
+    sub_h!(H, μd, 1:2)
+    sub_h!(H, μc, 3:4)
+    return H
 end
 
 function sub_h!(H, μ, i)
-	v = 1 / √(1 + μ^2)
-	H[i,i] .= v
-	H[i[1],i[1]] *= μ
-	H[i[2],i[2]] *= -μ
-	return H
+    v = 1 / √(1 + μ^2)
+    H[i, i] .= v
+    H[i[1], i[1]] *= μ
+    H[i[2], i[2]] *= -μ
+    return H
 end
 
 """
@@ -97,12 +97,12 @@ For example, if the other player defected, the matrix will rotate actions toward
 - `γ`: entanglement parameter which aligns beliefs and actions
 """
 function make_H2(γ)
-	v = -γ / √(2)
-	H = [v 0 v 0;
-		 0 -v 0 v;
-		 v 0 -v 0;
-		 0 v 0 v]
-	return H
+    v = -γ / √(2)
+    H = [v 0 v 0;
+        0 -v 0 v;
+        v 0 -v 0;
+        0 v 0 v]
+    return H
 end
 
 rand(dist::AbstractQPDM; t = π / 2) = rand(dist, 1; t = π / 2)
@@ -160,7 +160,7 @@ Returns the joint probability density given data for the following conditions:
 """
 function pdf(dist::AbstractQPDM, n::Int, n_d::Vector{Int}; t = π / 2)
     Θ = predict(dist; t)
-    return prod(@. pdf(Binomial(n, Θ), n_d)) 
+    return prod(@. pdf(Binomial(n, Θ), n_d))
 end
 
 """
